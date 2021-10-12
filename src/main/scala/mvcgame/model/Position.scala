@@ -1,15 +1,9 @@
 package cz.cvut.fit.niadp
 package mvcgame.model
 
-class Position {
-  private var dimX = 0
-  private var dimY = 0
-
-  def this(posX: Int, posY: Int) {
-    this()
-    this.dimX = posX
-    this.dimY = posY
-  }
+class Position(posX: Int=0, posY: Int=0) {
+  private var dimX = posX
+  private var dimY = posY
 
   def getX: Int = dimX
 
@@ -21,5 +15,10 @@ class Position {
 
   def setX(x: Int): Unit = {
     this.dimX = x
+  }
+
+  def add(v: Vector): Unit = {
+    dimX += v.getDX
+    dimY += v.getDY
   }
 }

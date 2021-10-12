@@ -3,7 +3,9 @@ package mvcgame
 
 
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig
-import cz.cvut.fit.niadp.mvcgame.model.Position
+import cz.cvut.fit.niadp.mvcgame.controller.GameController
+import cz.cvut.fit.niadp.mvcgame.model.{GameModel, Position}
+import cz.cvut.fit.niadp.mvcgame.view.GameView
 import scalafx.application.Platform
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.image.Image
@@ -13,35 +15,12 @@ import scala.collection.mutable.ArrayBuffer
 
 class MvcGame {
 
-  private var logoPos = new Position
-
-  def init(): Unit = {
-    logoPos = new Position(((MvcGameConfig.MAX_X / 2) - 128).asInstanceOf[Int], ((MvcGameConfig.MAX_Y / 2) - 128).asInstanceOf[Int])
-  }
+  private val model = GameModel();
+  private val controller = GameController(model);
+  private val view = GameView(model);
 
   def processPressedKeys(pressedKeysCodes: ArrayBuffer[String]): Unit = {
-    for (code <- pressedKeysCodes) {
-      code match {
-        case "UP" =>
-          logoPos.setY(logoPos.getY - 10)
-
-        case "DOWN" =>
-          logoPos.setY(logoPos.getY + 10)
-
-        case "LEFT" =>
-          logoPos.setX(logoPos.getX - 10)
-
-        case "RIGHT" =>
-          logoPos.setX(logoPos.getX + 10)
-
-        case "ESCAPE" =>
-          Platform.exit()
-          System.exit(0)
-
-        case _ =>
-        //nothing
-      }
-    }
+    this.controller.processPressedKeys(pressedKeysCodes)
   }
 
   def update(): Unit = {
@@ -49,7 +28,7 @@ class MvcGame {
   }
 
   def render(gr: GraphicsContext): Unit = {
-    gr.drawImage(new Image("icons/fit-icon-256x256.png"), logoPos.getX, logoPos.getY)
+    this.view.render(gr)
   }
 
   def getWindowTitle = "The NI-ADP.16 MvcGame"

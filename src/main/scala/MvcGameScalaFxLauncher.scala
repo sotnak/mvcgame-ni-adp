@@ -14,17 +14,16 @@ import scalafx.scene.input.KeyEvent
 object MvcGameScalaFxLauncher extends JFXApp3{
 
   private val theMvcGame = new MvcGame()
-  theMvcGame.init()
 
   def start(): Unit = {
     val winTitle = theMvcGame.getWindowTitle
     val winWidth = theMvcGame.getWindowWidth
-    val winHeigth = theMvcGame.getWindowHeight
+    val winHeight = theMvcGame.getWindowHeight
 
     val root = new Group()
     val theScene = new Scene(root)
 
-    val canvas = new Canvas(winWidth, winHeigth)
+    val canvas = new Canvas(winWidth, winHeight)
     root.getChildren.add(canvas)
 
     val gc = canvas.getGraphicsContext2D
@@ -45,7 +44,7 @@ object MvcGameScalaFxLauncher extends JFXApp3{
     // the game-loop
     AnimationTimer (currentNanoTime => {
         // Clear the canvas
-        // gc.clearRect(0, 0, winWidth, winHeigth);
+        //gc.clearRect(0, 0, winWidth, winHeight);
         theMvcGame.processPressedKeys(pressedKeysCodes)
         theMvcGame.update()
         theMvcGame.render(gc)
