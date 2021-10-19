@@ -17,7 +17,12 @@ case class GameView(private val model: GameModel) extends Observer{
   def render(gr: GraphicsContext): Unit = {
     if(updateCnt > 0) {
       gr.clearRect(0, 0, MvcGameConfig.MAX_X, MvcGameConfig.MAX_Y);
+
       drawCannon(gr)
+      drawEnemies(gr)
+      drawCollisions(gr)
+      drawMissiles(gr)
+
       updateCnt=0
     }
   }
@@ -25,6 +30,27 @@ case class GameView(private val model: GameModel) extends Observer{
   def drawCannon(gr: GraphicsContext) : Unit ={
     val cannonPos = model.getCannonPos
     gr.drawImage(new Image("images/cannon.png"), cannonPos.getX, cannonPos.getY)
+  }
+
+  def drawEnemies(gr: GraphicsContext): Unit ={
+    for(enemy <- model.enemies){
+      val enemyPos = enemy.position
+      gr.drawImage(new Image("images/enemy1.png"), enemyPos.getX, enemyPos.getY)
+    }
+  }
+
+  def drawMissiles(gr: GraphicsContext): Unit ={
+    for(missile <- model.missiles){
+      val missilePos = missile.position
+      gr.drawImage(new Image("images/missile.png"), missilePos.getX, missilePos.getY)
+    }
+  }
+
+  def drawCollisions(gr: GraphicsContext): Unit ={
+    for(collision <- model.collisions){
+      val collisionPos = collision.position
+      gr.drawImage(new Image("images/collision.png"), collisionPos.getX, collisionPos.getY)
+    }
   }
 
   override def update(): Unit = {
