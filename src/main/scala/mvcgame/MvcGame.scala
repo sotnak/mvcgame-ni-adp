@@ -24,11 +24,12 @@ class MvcGame {
   }
 
   def update(): Unit = {
-    // nothing yet
+    this.model.destroyMissiles()
+    this.model.moveMissiles()
   }
 
-  def render(gr: GraphicsContext): Unit = {
-    this.view.render(gr)
+  def render(): Unit = {
+    this.view.render()
   }
 
   def getWindowTitle = "The NI-ADP.16 MvcGame"
@@ -36,4 +37,8 @@ class MvcGame {
   def getWindowWidth: Int = MvcGameConfig.MAX_X
 
   def getWindowHeight: Int = MvcGameConfig.MAX_Y
+
+  def setGraphicsContext(gc: GraphicsContext): Unit = {
+    this.view.setGraphicsContext(gc)
+  }
 }

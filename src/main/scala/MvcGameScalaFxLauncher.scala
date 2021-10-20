@@ -27,6 +27,7 @@ object MvcGameScalaFxLauncher extends JFXApp3{
     root.getChildren.add(canvas)
 
     val gc = canvas.getGraphicsContext2D
+    theMvcGame.setGraphicsContext(gc)
 
     val pressedKeysCodes = ArrayBuffer.empty[String]
 
@@ -47,7 +48,7 @@ object MvcGameScalaFxLauncher extends JFXApp3{
         //gc.clearRect(0, 0, winWidth, winHeight);
         theMvcGame.processPressedKeys(pressedKeysCodes)
         theMvcGame.update()
-        theMvcGame.render(gc)
+        theMvcGame.render()
       }).start()
 
     stage = new PrimaryStage{

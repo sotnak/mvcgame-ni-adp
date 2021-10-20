@@ -18,6 +18,9 @@ case class GameController(private val model: GameModel) {
         case "DOWN" =>
           this.model.moveCannonDown()
 
+        case "SPACE" =>
+          this.model.cannonShoot()
+
         case "ESCAPE" =>
           Platform.exit()
           System.exit(0)
