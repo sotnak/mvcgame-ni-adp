@@ -1,5 +1,5 @@
 package cz.cvut.fit.niadp
 package mvcgame.model.gameObjects
 
-abstract class AbsMissile extends GameObject {
+abstract class AbsEnemy extends GameObject {
 }

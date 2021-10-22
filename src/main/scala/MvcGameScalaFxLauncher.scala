@@ -44,12 +44,12 @@ object MvcGameScalaFxLauncher extends JFXApp3{
 
     // the game-loop
     AnimationTimer (currentNanoTime => {
-        // Clear the canvas
-        //gc.clearRect(0, 0, winWidth, winHeight);
-        theMvcGame.processPressedKeys(pressedKeysCodes)
-        theMvcGame.update()
-        theMvcGame.render()
-      }).start()
+      // Clear the canvas
+      //gc.clearRect(0, 0, winWidth, winHeight);
+      theMvcGame.processPressedKeys(pressedKeysCodes)
+      theMvcGame.update()
+      theMvcGame.render()
+    }).start()
 
     stage = new PrimaryStage{
       title = winTitle

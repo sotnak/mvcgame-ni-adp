@@ -4,19 +4,20 @@ package mvcgame.model
 import mvcgame.config.MvcGameConfig
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.{GameObjectsFactoryA, IGameObjectsFactory}
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsMissile, Collision, Enemy, GameObject}
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.{CollisionA, EnemyA}
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsMissile, GameObject}
 import cz.cvut.fit.niadp.mvcgame.observer.Observable
 
 import scala.collection.mutable.ListBuffer
 
-case class GameModel() extends Observable {
+class GameModel extends Observable {
 
   private val goFactory : IGameObjectsFactory = new GameObjectsFactoryA(this)
 
   private val cannon : AbsCannon = goFactory.createCannon()
-  val enemies: ListBuffer[Enemy] = ListBuffer.empty
+  val enemies: ListBuffer[EnemyA] = ListBuffer.empty
   val missiles: ListBuffer[AbsMissile] = ListBuffer.empty
-  val collisions: ListBuffer[Collision] = ListBuffer.empty
+  val collisions: ListBuffer[CollisionA] = ListBuffer.empty
 
   def moveCannonDown(): Unit = {
     cannon.moveDown()
@@ -49,7 +50,8 @@ case class GameModel() extends Observable {
         toRemove.addOne(missile)
     }
 
-    this.missiles --= toRemove
+    if(toRemove.nonEmpty)
+      this.missiles --= toRemove
   }
 
   def getCannonPos: Position = cannon.getPosition

@@ -3,10 +3,9 @@ package mvcgame.controller
 
 import cz.cvut.fit.niadp.mvcgame.model.GameModel
 import scalafx.application.Platform
-
 import scala.collection.mutable.ArrayBuffer
 
-case class GameController(private val model: GameModel) {
+class GameController(private val model: GameModel) {
 
   def processPressedKeys(pressedKeysCodes: ArrayBuffer[String]): Unit = {
 

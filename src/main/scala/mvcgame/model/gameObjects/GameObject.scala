@@ -4,7 +4,7 @@ package mvcgame.model.gameObjects
 import mvcgame.model.Position
 import mvcgame.model.Vector
 
-import cz.cvut.fit.niadp.mvcgame.visitor.IVisitable
+import cz.cvut.fit.niadp.mvcgame.visitor.{IVisitable, IVisitor}
 
 trait GameObject extends IVisitable{
   var position:Position = new Position()

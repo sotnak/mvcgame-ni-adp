@@ -2,7 +2,7 @@ package cz.cvut.fit.niadp
 package mvcgame.model.gameObjects.familyA
 
 import mvcgame.model.Position
-import mvcgame.model.gameObjects.{AbsMissile, GameObject}
+import mvcgame.model.gameObjects.AbsMissile
 
 class MissileA(p: Position = new Position(0,0)) extends AbsMissile{
   this.position=p
