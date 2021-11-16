@@ -1,13 +1,14 @@
 package cz.cvut.fit.niadp
 package mvcgame.view
 
-import mvcgame.model.GameModel
+import mvcgame.model.IGameModel
+
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig
 import cz.cvut.fit.niadp.mvcgame.observer.Observer
 import cz.cvut.fit.niadp.mvcgame.visitor.GameRenderer
 import scalafx.scene.canvas.GraphicsContext
 
-class GameView(private val model: GameModel) extends Observer{
+class GameView(private val model: IGameModel) extends Observer{
 
   model.registerObserver(this)
   private var updateCnt : Int = 1

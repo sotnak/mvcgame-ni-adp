@@ -12,19 +12,31 @@ class GameRenderer extends IVisitor {
     this.gc = gc
   }
 
-  override def visitCannon(cannon: AbsCannon): Unit = {
+
+  def visitCannon(cannon: AbsCannon): Unit = {
     this.gc.drawImage(new Image("images/cannon.png"), cannon.getPosition.getX, cannon.getPosition.getY)
   }
 
-  override def visitMissile(missile: AbsMissile): Unit = {
+  def visitMissile(missile: AbsMissile): Unit = {
     this.gc.drawImage(new Image("images/missile.png"), missile.getPosition.getX, missile.getPosition.getY)
   }
 
-  override def visitEnemy(enemy: AbsEnemy): Unit = {
+  def visitEnemy(enemy: AbsEnemy): Unit = {
     this.gc.drawImage(new Image("images/enemy1.png"), enemy.getPosition.getX, enemy.getPosition.getY)
   }
 
-  override def visitCollision(collision: AbsCollision): Unit = {
+  def visitCollision(collision: AbsCollision): Unit = {
     this.gc.drawImage(new Image("images/collision.png"), collision.getPosition.getX, collision.getPosition.getY)
+  }
+
+  override def visit(visitable: IVisitable): Unit = {
+
+    visitable match {
+      case cannon: AbsCannon => visitCannon(cannon)
+      case missile: AbsMissile => visitMissile(missile)
+      case enemy: AbsEnemy => visitEnemy(enemy)
+      case collision: AbsCollision => visitCollision(collision)
+      case _ =>
+    }
   }
 }

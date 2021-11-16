@@ -4,6 +4,11 @@ package mvcgame.model.gameObjects.familyA
 import mvcgame.model.Position
 import mvcgame.model.gameObjects.AbsMissile
 
-class MissileA(p: Position = new Position(0,0)) extends AbsMissile{
-  this.position=p
+import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy
+
+class MissileA(initPosition: Position = new Position(0,0), initAngle: Double, initVelocity: Int, val movingStrategy: IMovingStrategy) extends AbsMissile(initAngle, initVelocity){
+
+  this.position=initPosition
+
+  override def move(): Unit = this.movingStrategy.updatePosition(this)
 }

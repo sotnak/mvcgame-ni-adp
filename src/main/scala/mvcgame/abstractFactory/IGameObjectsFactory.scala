@@ -5,7 +5,7 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, Abs
 
 trait IGameObjectsFactory {
   def createCannon(): AbsCannon
-  def createMissile(): AbsMissile
+  def createMissile(initAngle: Double, initVelocity: Int): AbsMissile
   def createEnemy(): AbsEnemy
   def createCollision(): AbsCollision
 }

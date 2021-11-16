@@ -6,18 +6,20 @@ import mvcgame.config.MvcGameConfig
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.{GameObjectsFactoryA, IGameObjectsFactory}
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.{CollisionA, EnemyA}
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsMissile, GameObject}
-import cz.cvut.fit.niadp.mvcgame.observer.Observable
+import cz.cvut.fit.niadp.mvcgame.strategy.{IMovingStrategy, RealisticMovingStrategy, SimpleMovingStrategy}
 
 import scala.collection.mutable.ListBuffer
 
-class GameModel extends Observable {
-
+class GameModel extends IGameModel{
   private val goFactory : IGameObjectsFactory = new GameObjectsFactoryA(this)
 
   private val cannon : AbsCannon = goFactory.createCannon()
   val enemies: ListBuffer[EnemyA] = ListBuffer.empty
   val missiles: ListBuffer[AbsMissile] = ListBuffer.empty
   val collisions: ListBuffer[CollisionA] = ListBuffer.empty
+  var movingStrategy: IMovingStrategy = SimpleMovingStrategy()
+
+  var score = 0
 
   def moveCannonDown(): Unit = {
     cannon.moveDown()
@@ -29,16 +31,16 @@ class GameModel extends Observable {
     notifyObservers()
   }
 
+  def cannonPowerDown(): Unit = cannon.powerDown()
+
+  def cannonPowerUp(): Unit = cannon.powerUp()
+
+  def aimCannonDown(): Unit = cannon.aimDown()
+
+  def aimCannonUp(): Unit = cannon.aimUp()
+
   def cannonShoot(): Unit ={
-    this.missiles.addOne(this.cannon.shoot())
-    notifyObservers()
-  }
-
-  def moveMissiles(): Unit ={
-    for(missile <- this.missiles) {
-      missile.move(Vector(MvcGameConfig.MOVE_STEP,0))
-    }
-
+    this.missiles ++= this.cannon.shoot()
     notifyObservers()
   }
 
@@ -54,6 +56,19 @@ class GameModel extends Observable {
       this.missiles --= toRemove
   }
 
+  def moveMissiles(): Unit ={
+    for(missile <- this.missiles) {
+      missile.move()
+    }
+
+    val length = missiles.length
+
+    destroyMissiles()
+
+    if(length > 0)
+      notifyObservers()
+  }
+
   def getCannonPos: Position = cannon.getPosition
 
   def getMissiles: ListBuffer[AbsMissile] = this.missiles
@@ -64,4 +79,26 @@ class GameModel extends Observable {
     go += this.cannon
     return go
   }
+
+  def toggleMovingStrategy(): Unit ={
+    movingStrategy match{
+      case _ : SimpleMovingStrategy => movingStrategy = new RealisticMovingStrategy
+      case _: RealisticMovingStrategy => movingStrategy = new SimpleMovingStrategy
+      case _ =>
+    }
+  }
+
+  private case class Memento(score: Int /* ... */){
+  }
+
+  def createMemento(): Any = Memento(score)
+
+  def setMemento(memento: Any): Unit ={
+    val m = memento.asInstanceOf[Memento]
+    score = m.score
+  }
+
+  override def toggleShootingMode(): Unit = cannon.toggleShootingMode()
+
+  override def getMovingStrategy: IMovingStrategy = movingStrategy
 }
