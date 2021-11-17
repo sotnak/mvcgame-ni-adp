@@ -7,5 +7,5 @@ import java.time.temporal.ChronoUnit
 trait LifetimeLimited{
   val bornAt: LocalDateTime = LocalDateTime.now()
 
-  def getAge: Long = ChronoUnit.SECONDS.between(LocalDateTime.now(), bornAt)
+  def getAge: Long = ChronoUnit.SECONDS.between(bornAt, LocalDateTime.now())
 }

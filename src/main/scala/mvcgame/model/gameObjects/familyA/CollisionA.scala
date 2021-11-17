@@ -2,8 +2,8 @@ package cz.cvut.fit.niadp
 package mvcgame.model.gameObjects.familyA
 
 import mvcgame.model.Position
-import mvcgame.model.gameObjects.AbsCollision
+import mvcgame.model.gameObjects.{AbsCollision, LifetimeLimited}
 
-class CollisionA(p: Position = new Position(0,0)) extends AbsCollision {
+class CollisionA(p: Position) extends AbsCollision {
   this.position = p
 }

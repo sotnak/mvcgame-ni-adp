@@ -3,40 +3,54 @@ package mvcgame.controller
 
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel
 import scalafx.application.Platform
+
 import scala.collection.mutable.ArrayBuffer
+import cz.cvut.fit.niadp.mvcgame.command.{MoveCannonDownCmd, MoveCannonUpCmd}
 
 class GameController(private val model: IGameModel) {
+
+  private val prevPressed: ArrayBuffer[String] = ArrayBuffer.empty[String]
+
+  def justPressed(keyCode: String, callback: ()=>Unit):Unit = {
+    if( !prevPressed.contains(keyCode) )
+      callback()
+  }
 
   def processPressedKeys(pressedKeysCodes: ArrayBuffer[String]): Unit = {
 
     for (code <- pressedKeysCodes) {
       code match {
         case "UP" =>
-          this.model.moveCannonUp()
+          model.registerCommand(MoveCannonUpCmd(model))
 
         case "DOWN" =>
-          this.model.moveCannonDown()
+          model.registerCommand(MoveCannonDownCmd(model))
 
         case "SPACE" =>
-          this.model.cannonShoot()
+          justPressed("SPACE", model.cannonShoot )
 
         case "A" =>
-          this.model.aimCannonUp()
+          justPressed("A", model.aimCannonUp )
 
         case "D" =>
-          this.model.aimCannonDown()
+          justPressed("D", model.aimCannonDown )
 
         case "W" =>
-          this.model.cannonPowerUp()
+          justPressed("W", model.cannonPowerUp )
 
         case "S" =>
-          this.model.cannonPowerDown()
+          justPressed("S", model.cannonPowerDown )
 
         case "R" =>
-          this.model.toggleMovingStrategy()
+          justPressed("R", model.toggleMovingStrategy )
 
         case "T" =>
-          this.model.toggleShootingMode()
+          justPressed("T", model.toggleShootingMode )
+
+
+        case "Z" =>
+          justPressed("Z", model.undoLastCommand )
+
 
         case "ESCAPE" =>
           Platform.exit()
@@ -46,5 +60,8 @@ class GameController(private val model: IGameModel) {
         //nothing
       }
     }
+
+    prevPressed.clear()
+    prevPressed ++= pressedKeysCodes
   }
 }

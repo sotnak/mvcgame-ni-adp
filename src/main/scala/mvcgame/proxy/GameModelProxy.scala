@@ -3,6 +3,7 @@ package mvcgame.proxy
 
 import mvcgame.model.{IGameModel, Position}
 
+import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject
 import cz.cvut.fit.niadp.mvcgame.observer.Observer
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy
@@ -33,4 +34,11 @@ case class GameModelProxy(model: IGameModel) extends IGameModel{
 
   override def registerObserver(observer: Observer): Unit = model.registerObserver(observer)
   override def unregisterObserver(observer: Observer): Unit = model.unregisterObserver(observer)
+
+  override def registerCommand(cmd: AbstractGameCommand): Unit = model.registerCommand(cmd)
+  override def undoLastCommand(): Unit = model.undoLastCommand()
+
+  override def update(): Unit = model.update()
+
+  override def getScore: Int = model.getScore
 }

@@ -21,4 +21,6 @@ class Position(posX: Int=0, posY: Int=0) {
     dimX += v.getDX
     dimY += v.getDY
   }
+
+  def distance(other: Position): Double = scala.math.sqrt(scala.math.pow(getX - other.getX, 2) + scala.math.pow(getY - other.getY, 2))
 }

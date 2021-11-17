@@ -2,13 +2,13 @@ package cz.cvut.fit.niadp
 package mvcgame
 
 
+import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig
 import cz.cvut.fit.niadp.mvcgame.controller.GameController
 import cz.cvut.fit.niadp.mvcgame.memento.CareTaker
 import cz.cvut.fit.niadp.mvcgame.model.GameModel
 import cz.cvut.fit.niadp.mvcgame.proxy.GameModelProxy
 import cz.cvut.fit.niadp.mvcgame.view.GameView
-import scalafx.scene.canvas.GraphicsContext
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -24,13 +24,9 @@ class MvcGame {
     this.controller.processPressedKeys(pressedKeysCodes)
   }
 
-  def update(): Unit = {
-    this.model.moveMissiles()
-  }
+  def update(): Unit = this.model.update()
 
-  def render(): Unit = {
-    this.view.render()
-  }
+  def render(): Unit = this.view.render()
 
   def getWindowTitle = "The NI-ADP.16 MvcGame"
 
@@ -38,7 +34,7 @@ class MvcGame {
 
   def getWindowHeight: Int = MvcGameConfig.MAX_Y
 
-  def setGraphicsContext(gc: GraphicsContext): Unit = {
+  def setGraphicsContext(gc: IGameGraphics): Unit = {
     this.view.setGraphicsContext(gc)
   }
 }

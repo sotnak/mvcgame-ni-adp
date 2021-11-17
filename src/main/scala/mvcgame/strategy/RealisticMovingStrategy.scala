@@ -13,7 +13,7 @@ case class RealisticMovingStrategy() extends IMovingStrategy {
     val age = missile.getAge
 
     val dx: Int = ( velocity * age * Math.cos(angle) ).toInt
-    val dy: Int = ( velocity * age * Math.sin(angle) - ( 0.5 * MvcGameConfig.GRAVITY * age * age ) ).toInt
+    val dy: Int = (  ( velocity * age * Math.sin(angle) ) + ( 0.5 * MvcGameConfig.GRAVITY * age * age ) ).toInt
 
     missile.move(Vector(dx,dy))
   }

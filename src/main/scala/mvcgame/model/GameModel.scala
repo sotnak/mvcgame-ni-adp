@@ -4,22 +4,90 @@ package mvcgame.model
 import mvcgame.config.MvcGameConfig
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.{GameObjectsFactoryA, IGameObjectsFactory}
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.{CollisionA, EnemyA}
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsMissile, GameObject}
+import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile, GameObject}
 import cz.cvut.fit.niadp.mvcgame.strategy.{IMovingStrategy, RealisticMovingStrategy, SimpleMovingStrategy}
 
+import java.util
+import java.util.concurrent.LinkedBlockingQueue
 import scala.collection.mutable.ListBuffer
+import scala.util.control.Breaks._
 
 class GameModel extends IGameModel{
   private val goFactory : IGameObjectsFactory = new GameObjectsFactoryA(this)
 
   private val cannon : AbsCannon = goFactory.createCannon()
-  val enemies: ListBuffer[EnemyA] = ListBuffer.empty
+  val enemies: ListBuffer[AbsEnemy] = ListBuffer.empty
   val missiles: ListBuffer[AbsMissile] = ListBuffer.empty
-  val collisions: ListBuffer[CollisionA] = ListBuffer.empty
+  val collisions: ListBuffer[AbsCollision] = ListBuffer.empty
   var movingStrategy: IMovingStrategy = SimpleMovingStrategy()
 
+  val unexecutedCmds: util.Queue[AbstractGameCommand] = new LinkedBlockingQueue[AbstractGameCommand]()
+  val executedCmds: util.Stack[AbstractGameCommand] = new util.Stack[AbstractGameCommand]()
+
   var score = 0
+
+  override def getScore: Int = score
+
+  override def update(): Unit = {
+    executeCmds()
+    moveMissiles()
+
+    if(enemies.isEmpty){
+      spawnEnemies()
+    }
+
+    missileVicinity()
+    collisionsAging()
+  }
+
+  def collisionsAging(): Unit = {
+    val collisionsToRemove = ListBuffer.empty[AbsCollision]
+
+    for(collision <- collisions){
+      if(collision.getAge > MvcGameConfig.COLLISION_LIFESPAN)
+        collisionsToRemove += collision
+    }
+
+    collisions --= collisionsToRemove
+
+    if(collisionsToRemove.nonEmpty)
+      notifyObservers()
+  }
+
+  def spawnEnemies(): Unit = {
+    for(i <- 1 to MvcGameConfig.ENEMIES_SPAWNED){
+      enemies.addOne(goFactory.createEnemy())
+    }
+  }
+
+  def missileVicinity(): Unit = {
+    val enemiesToRemove = ListBuffer.empty[AbsEnemy]
+    val missilesToRemove = ListBuffer.empty[AbsMissile]
+
+    for(missile <- missiles){
+      breakable {
+        for (enemy <- enemies) {
+          val distance = missile.getPosition.distance(enemy.getPosition)
+
+          if (distance < MvcGameConfig.ENEMY_HIT_SIZE) {
+            collisions.addOne(enemy.destroy())
+            enemiesToRemove += enemy
+            missilesToRemove += missile
+            break
+          }
+        }
+      }
+    }
+
+    enemies --= enemiesToRemove
+    missiles --= missilesToRemove
+
+    score += enemiesToRemove.length
+
+    if(enemiesToRemove.nonEmpty)
+      notifyObservers()
+  }
 
   def moveCannonDown(): Unit = {
     cannon.moveDown()
@@ -48,8 +116,10 @@ class GameModel extends IGameModel{
     val toRemove: ListBuffer[AbsMissile] = ListBuffer.empty
 
     for(missile <- this.missiles){
-      if(missile.getPosition.getX > MvcGameConfig.MAX_X)
+      if(missile.getPosition.getX > MvcGameConfig.MAX_X || missile.getPosition.getX < 0
+        || missile.getPosition.getY > MvcGameConfig.MAX_Y /*|| missile.getPosition.getY < 0*/) {
         toRemove.addOne(missile)
+      }
     }
 
     if(toRemove.nonEmpty)
@@ -75,8 +145,10 @@ class GameModel extends IGameModel{
 
   def getGameObjects: ListBuffer[GameObject] = {
     val go = ListBuffer.empty[GameObject]
-    go ++= this.missiles
-    go += this.cannon
+    go ++= missiles
+    go += cannon
+    go ++= enemies
+    go ++= collisions
     return go
   }
 
@@ -88,17 +160,38 @@ class GameModel extends IGameModel{
     }
   }
 
-  private case class Memento(score: Int /* ... */){
-  }
+  private case class Memento(score: Int, cannonPos: Position){}
 
-  def createMemento(): Any = Memento(score)
+  def createMemento(): Any = Memento(score, new Position(cannon.position.getX, cannon.position.getY) )
 
   def setMemento(memento: Any): Unit ={
     val m = memento.asInstanceOf[Memento]
     score = m.score
+    cannon.position.setX(m.cannonPos.getX)
+    cannon.position.setY(m.cannonPos.getY)
   }
 
   override def toggleShootingMode(): Unit = cannon.toggleShootingMode()
 
   override def getMovingStrategy: IMovingStrategy = movingStrategy
+
+  override def registerCommand(cmd: AbstractGameCommand): Unit = unexecutedCmds.add(cmd)
+
+  override def undoLastCommand(): Unit = {
+    if(!executedCmds.empty()){
+      val cmd = executedCmds.pop()
+      cmd.unExecute()
+      notifyObservers()
+    }
+  }
+
+  def executeCmds(): Unit = {
+    while(!unexecutedCmds.isEmpty){
+      val cmd = unexecutedCmds.poll()
+      cmd.doExecute()
+      executedCmds.push(cmd)
+    }
+
+    notifyObservers()
+  }
 }

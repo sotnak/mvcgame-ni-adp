@@ -1,6 +1,7 @@
 package cz.cvut.fit.niadp
 
 import cz.cvut.fit.niadp.mvcgame.MvcGame
+import cz.cvut.fit.niadp.mvcgame.bridge.{GameGraphics, IGameGraphics, ScalaFxGraphics}
 
 import scala.collection.mutable.ArrayBuffer
 import scalafx.Includes._
@@ -8,7 +9,7 @@ import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp3
 import scalafx.application.JFXApp3.PrimaryStage
 import scalafx.scene.{Group, Scene}
-import scalafx.scene.canvas.Canvas
+import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.input.KeyEvent
 
 object MvcGameScalaFxLauncher extends JFXApp3{
@@ -26,8 +27,11 @@ object MvcGameScalaFxLauncher extends JFXApp3{
     val canvas = new Canvas(winWidth, winHeight)
     root.getChildren.add(canvas)
 
-    val gc = canvas.getGraphicsContext2D
-    theMvcGame.setGraphicsContext(gc)
+    val gc: GraphicsContext = canvas.getGraphicsContext2D
+    //theMvcGame.setGraphicsContext(gc)
+
+    val gr: IGameGraphics = GameGraphics(ScalaFxGraphics(gc))
+    theMvcGame.setGraphicsContext(gr)
 
     val pressedKeysCodes = ArrayBuffer.empty[String]
 
