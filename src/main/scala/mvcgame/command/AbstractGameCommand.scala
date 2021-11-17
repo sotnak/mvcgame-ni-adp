@@ -3,18 +3,20 @@ package mvcgame.command
 
 import mvcgame.model.IGameModel
 
-abstract class AbstractGameCommand(val model: IGameModel) {
+import cz.cvut.fit.niadp.mvcgame.memento.CareTaker
+
+abstract class AbstractGameCommand {
 
   var memento: Any = _
 
   protected def execute()
 
   def doExecute(): Unit ={
-    memento = model.createMemento()
+    memento = CareTaker.createMemento()
     execute()
   }
 
   def unExecute(): Unit={
-    model.setMemento(memento)
+    CareTaker.setMemento(memento)
   }
 }

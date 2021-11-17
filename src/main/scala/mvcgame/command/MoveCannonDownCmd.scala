@@ -3,8 +3,10 @@ package mvcgame.command
 
 import mvcgame.model.IGameModel
 
-case class MoveCannonDownCmd(override val model: IGameModel) extends AbstractGameCommand(model) {
+import cz.cvut.fit.niadp.mvcgame.memento.CareTaker
+
+class MoveCannonDownCmd extends AbstractGameCommand {
   override protected def execute(): Unit = {
-    model.moveCannonDown()
+    CareTaker.getModel.moveCannonDown()
   }
 }

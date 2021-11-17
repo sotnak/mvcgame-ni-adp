@@ -28,7 +28,7 @@ object MvcGameConfig {
 
   val ENEMIES_SPAWNED: Int = 3
 
-  val ENEMY_HIT_SIZE: Int = 50
+  val ENEMY_HIT_SIZE: Int = 35
 
   val COLLISION_LIFESPAN: Int = 1
 }

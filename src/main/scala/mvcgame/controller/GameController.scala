@@ -21,10 +21,10 @@ class GameController(private val model: IGameModel) {
     for (code <- pressedKeysCodes) {
       code match {
         case "UP" =>
-          model.registerCommand(MoveCannonUpCmd(model))
+          model.registerCommand(new MoveCannonUpCmd)
 
         case "DOWN" =>
-          model.registerCommand(MoveCannonDownCmd(model))
+          model.registerCommand(new MoveCannonDownCmd)
 
         case "SPACE" =>
           justPressed("SPACE", model.cannonShoot )
@@ -46,7 +46,6 @@ class GameController(private val model: IGameModel) {
 
         case "T" =>
           justPressed("T", model.toggleShootingMode )
-
 
         case "Z" =>
           justPressed("Z", model.undoLastCommand )
