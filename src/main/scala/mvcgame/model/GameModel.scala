@@ -5,8 +5,10 @@ import mvcgame.config.MvcGameConfig
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.{GameObjectsFactoryA, IGameObjectsFactory}
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand
+import cz.cvut.fit.niadp.mvcgame.iterator.{ConcreteAggregate, IAggregate, IIterator}
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile, GameObject}
 import cz.cvut.fit.niadp.mvcgame.strategy.{IMovingStrategy, RealisticMovingStrategy, SimpleMovingStrategy}
+import cz.cvut.fit.niadp.mvcgame.view.GameInfo
 
 import java.util
 import java.util.concurrent.LinkedBlockingQueue
@@ -21,9 +23,12 @@ class GameModel extends IGameModel{
   val missiles: ListBuffer[AbsMissile] = ListBuffer.empty
   val collisions: ListBuffer[AbsCollision] = ListBuffer.empty
   var movingStrategy: IMovingStrategy = SimpleMovingStrategy()
+  val gameInfo: GameInfo = new GameInfo(this)
 
   val unexecutedCmds: util.Queue[AbstractGameCommand] = new LinkedBlockingQueue[AbstractGameCommand]()
   val executedCmds: util.Stack[AbstractGameCommand] = new util.Stack[AbstractGameCommand]()
+
+  val aggregate: IAggregate = ConcreteAggregate()
 
   var score = 0
 
@@ -149,8 +154,11 @@ class GameModel extends IGameModel{
     go += cannon
     go ++= enemies
     go ++= collisions
+    go += gameInfo
     return go
   }
+
+  def getGameObjectsIterator: IIterator[GameObject] = aggregate.createIterator[GameObject](getGameObjects)
 
   def toggleMovingStrategy(): Unit ={
     movingStrategy match{
@@ -160,15 +168,16 @@ class GameModel extends IGameModel{
     }
   }
 
-  private case class Memento(score: Int, cannonPos: Position){}
+  private case class Memento( cannonPos: Position, cannonPower: Int, cannonAngle: Double){}
 
-  def createMemento(): Any = Memento(score, new Position(cannon.position.getX, cannon.position.getY) )
+  def createMemento(): Any = Memento(new Position(cannon.position.getX, cannon.position.getY), cannon.getPower, cannon.getAngle )
 
   def setMemento(memento: Any): Unit ={
     val m = memento.asInstanceOf[Memento]
-    score = m.score
     cannon.position.setX(m.cannonPos.getX)
     cannon.position.setY(m.cannonPos.getY)
+    cannon.setPower(m.cannonPower)
+    cannon.setAngle(m.cannonAngle)
   }
 
   override def toggleShootingMode(): Unit = cannon.toggleShootingMode()
@@ -194,4 +203,8 @@ class GameModel extends IGameModel{
 
     notifyObservers()
   }
+
+  override def getCannonPower: Int = cannon.getPower
+
+  override def getCannonAngle: Double = cannon.getAngle
 }

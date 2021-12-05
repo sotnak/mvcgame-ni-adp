@@ -14,8 +14,8 @@ class CannonA(p: Position = new Position(0,0), val goFactory: IGameObjectsFactor
 
   this.position=p
 
-  var power: Int = MvcGameConfig.INIT_POWER
-  var angle: Double = MvcGameConfig.INIT_ANGLE
+  power = MvcGameConfig.INIT_POWER
+  angle = MvcGameConfig.INIT_ANGLE
 
   val shootingBatch: ArrayBuffer[AbsMissile] = ArrayBuffer.empty[AbsMissile]
 

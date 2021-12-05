@@ -5,7 +5,7 @@ import cz.cvut.fit.niadp.mvcgame.model.IGameModel
 import scalafx.application.Platform
 
 import scala.collection.mutable.ArrayBuffer
-import cz.cvut.fit.niadp.mvcgame.command.{MoveCannonDownCmd, MoveCannonUpCmd}
+import cz.cvut.fit.niadp.mvcgame.command.{AimDownCmd, AimUpCmd, MoveCannonDownCmd, MoveCannonUpCmd, PowerDownCmd, PowerUpCmd}
 
 class GameController(private val model: IGameModel) {
 
@@ -21,25 +21,25 @@ class GameController(private val model: IGameModel) {
     for (code <- pressedKeysCodes) {
       code match {
         case "UP" =>
-          model.registerCommand(new MoveCannonUpCmd)
+          model.registerCommand(MoveCannonUpCmd(model))
 
         case "DOWN" =>
-          model.registerCommand(new MoveCannonDownCmd)
+          model.registerCommand(MoveCannonDownCmd(model))
 
         case "SPACE" =>
           justPressed("SPACE", model.cannonShoot )
 
         case "A" =>
-          justPressed("A", model.aimCannonUp )
+          justPressed("A", ()=>model.registerCommand( AimUpCmd(model) ) )
 
         case "D" =>
-          justPressed("D", model.aimCannonDown )
+          justPressed("D", ()=>model.registerCommand( AimDownCmd(model) ) )
 
         case "W" =>
-          justPressed("W", model.cannonPowerUp )
+          justPressed("W", ()=>model.registerCommand( PowerUpCmd(model) ) )
 
         case "S" =>
-          justPressed("S", model.cannonPowerDown )
+          justPressed("S", ()=>model.registerCommand( PowerDownCmd(model) ) )
 
         case "R" =>
           justPressed("R", model.toggleMovingStrategy )

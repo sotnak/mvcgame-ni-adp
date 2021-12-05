@@ -3,6 +3,8 @@ package mvcgame.visitor
 import mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile}
 
 import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics
+import cz.cvut.fit.niadp.mvcgame.strategy.RealisticMovingStrategy
+import cz.cvut.fit.niadp.mvcgame.view.GameInfo
 
 class GameRenderer extends IVisitor {
   private var gc : IGameGraphics = _
@@ -31,6 +33,8 @@ class GameRenderer extends IVisitor {
     this.gc.drawImage("images/collision.png", collision.getPosition)
   }
 
+  def visitGameInfo(gameInfo: GameInfo): Unit = gc.drawText(gameInfo.getText,gameInfo.getPosition)
+
   override def visit(visitable: IVisitable): Unit = {
 
     visitable match {
@@ -38,6 +42,7 @@ class GameRenderer extends IVisitor {
       case missile: AbsMissile => visitMissile(missile)
       case enemy: AbsEnemy => visitEnemy(enemy)
       case collision: AbsCollision => visitCollision(collision)
+      case gameInfo: GameInfo => visitGameInfo(gameInfo)
       case _ =>
     }
   }

@@ -4,6 +4,7 @@ package mvcgame.model
 import mvcgame.observer.Observable
 
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand
+import cz.cvut.fit.niadp.mvcgame.iterator.IIterator
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy
 
@@ -26,9 +27,12 @@ trait IGameModel extends Observable{
   def toggleMovingStrategy(): Unit
 
   def moveMissiles(): Unit
-  def getGameObjects: ListBuffer[GameObject]
+  //def getGameObjects: ListBuffer[GameObject]
+  def getGameObjectsIterator: IIterator[GameObject]
 
   def getCannonPos: Position
+  def getCannonPower: Int
+  def getCannonAngle: Double
   def getMovingStrategy: IMovingStrategy
 
   def registerCommand(cmd: AbstractGameCommand):Unit
