@@ -3,7 +3,6 @@ package mvcgame.visitor
 import mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile}
 
 import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics
-import cz.cvut.fit.niadp.mvcgame.strategy.RealisticMovingStrategy
 import cz.cvut.fit.niadp.mvcgame.view.GameInfo
 
 class GameRenderer extends IVisitor {

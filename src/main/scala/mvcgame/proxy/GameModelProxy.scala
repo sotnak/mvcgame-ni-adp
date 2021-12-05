@@ -9,8 +9,6 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject
 import cz.cvut.fit.niadp.mvcgame.observer.Observer
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy
 
-import scala.collection.mutable.ListBuffer
-
 case class GameModelProxy(model: IGameModel) extends IGameModel{
   override def moveCannonDown(): Unit = model.moveCannonDown()
   override def moveCannonUp(): Unit = model.moveCannonUp()
@@ -22,7 +20,6 @@ case class GameModelProxy(model: IGameModel) extends IGameModel{
   override def toggleMovingStrategy(): Unit = model.toggleMovingStrategy()
   override def toggleShootingMode(): Unit = model.toggleShootingMode()
   override def moveMissiles(): Unit = model.moveMissiles()
-  //override def getGameObjects: ListBuffer[GameObject] = model.getGameObjects
   override def setMemento(memento: Any): Unit = model.setMemento(memento)
   override def createMemento(): Any = model.createMemento()
   override def getCannonPos: Position = model.getCannonPos
