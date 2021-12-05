@@ -6,9 +6,8 @@ import mvcgame.config.MvcGameConfig
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.{GameObjectsFactoryA, IGameObjectsFactory}
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand
 import cz.cvut.fit.niadp.mvcgame.iterator.{ConcreteAggregate, IAggregate, IIterator}
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile, GameObject}
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile, GameInfo, GameObject}
 import cz.cvut.fit.niadp.mvcgame.strategy.{IMovingStrategy, RealisticMovingStrategy, SimpleMovingStrategy}
-import cz.cvut.fit.niadp.mvcgame.view.GameInfo
 
 import java.util
 import java.util.concurrent.LinkedBlockingQueue

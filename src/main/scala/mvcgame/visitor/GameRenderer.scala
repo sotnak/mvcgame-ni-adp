@@ -1,9 +1,8 @@
 package cz.cvut.fit.niadp
 package mvcgame.visitor
-import mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile}
+import mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile, GameInfo}
 
 import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics
-import cz.cvut.fit.niadp.mvcgame.view.GameInfo
 
 class GameRenderer extends IVisitor {
   private var gc : IGameGraphics = _

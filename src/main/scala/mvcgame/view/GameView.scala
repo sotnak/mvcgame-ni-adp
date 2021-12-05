@@ -1,9 +1,9 @@
 package cz.cvut.fit.niadp
 package mvcgame.view
 
-import mvcgame.model.IGameModel
-
 import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics
+import cz.cvut.fit.niadp.mvcgame.model.{IGameModel, gameObjects}
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameInfo
 import cz.cvut.fit.niadp.mvcgame.observer.Observer
 import cz.cvut.fit.niadp.mvcgame.visitor.GameRenderer
 
@@ -13,7 +13,7 @@ class GameView(private val model: IGameModel) extends Observer{
   private var updateCnt : Int = 1
   private val gameRenderer: GameRenderer = new GameRenderer
   private var gc: IGameGraphics = _
-  private val gameInfo: GameInfo = GameInfo(model)
+  private val gameInfo: GameInfo = gameObjects.GameInfo(model)
 
   def setGraphicsContext(gc: IGameGraphics): Unit={
     this.gc = gc

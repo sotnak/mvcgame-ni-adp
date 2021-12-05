@@ -9,6 +9,9 @@ idePackagePrefix := Some("cz.cvut.fit.niadp")
 // Add dependency on ScalaFX library
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
 
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % Test
+libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.9.0" % Test
+
 // Fork a new JVM for 'run' and 'test:run', to avoid JavaFX double initialization problems
 fork := true
 
