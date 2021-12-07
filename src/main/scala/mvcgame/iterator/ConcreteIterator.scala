@@ -9,6 +9,9 @@ case class ConcreteIterator[A <: Any](val seq: AbstractSeq[A]) extends IIterator
   override def hasNext: Boolean = (index + 1 < seq.length)
 
   override def next: A = {
+    if(!hasNext)
+      throw new IndexOutOfBoundsException
+
     index += 1
     seq(index)
   }

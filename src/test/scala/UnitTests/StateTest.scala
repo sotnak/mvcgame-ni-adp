@@ -1,7 +1,9 @@
 package cz.cvut.fit.niadp
+package UnitTests
 
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon
-import cz.cvut.fit.niadp.mvcgame.state.{DoubleShootingMode, SingleShootingMode}
+import mvcgame.model.gameObjects.AbsCannon
+import mvcgame.state.{DoubleShootingMode, SingleShootingMode}
+
 import org.mockito.Mockito.{times, verify}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.mockito.MockitoSugar.mock

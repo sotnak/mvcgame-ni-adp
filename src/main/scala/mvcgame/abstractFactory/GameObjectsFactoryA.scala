@@ -2,7 +2,7 @@ package cz.cvut.fit.niadp
 package mvcgame.abstractFactory
 
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCollision, AbsEnemy}
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsCollision, AbsEnemy, AbsMissile}
 import cz.cvut.fit.niadp.mvcgame.model.{IGameModel, Position}
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.{CannonA, CollisionA, EnemyA, MissileA}
 
@@ -11,9 +11,9 @@ import scala.util.Random
 class GameObjectsFactoryA(val model: IGameModel) extends IGameObjectsFactory {
   val rnd = new Random
 
-  override def createCannon(): CannonA = new CannonA(new Position(MvcGameConfig.CANNON_POSX, MvcGameConfig.CANNON_POSY), this)
+  override def createCannon(): AbsCannon = new CannonA(new Position(MvcGameConfig.CANNON_POSX, MvcGameConfig.CANNON_POSY), this)
 
-  override def createMissile(initAngle: Double, initVelocity: Int): MissileA = new MissileA(new Position(model.getCannonPos.getX, model.getCannonPos.getY), initAngle, initVelocity, model.getMovingStrategy)
+  override def createMissile(initAngle: Double, initVelocity: Int): AbsMissile = new MissileA(new Position(model.getCannonPos.getX, model.getCannonPos.getY), initAngle, initVelocity, model.getMovingStrategy)
 
   override def createEnemy(): AbsEnemy = {
     val variant: Int = 1 + rnd.nextInt(2)

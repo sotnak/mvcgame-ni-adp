@@ -1,16 +1,19 @@
 package cz.cvut.fit.niadp
+package TestSuites
 
-import cz.cvut.fit.niadp.mvcgame.iterator.ConcreteIterator
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.{AbsCannon, AbsEnemy, AbsMissile, GameObject}
+import mvcgame.iterator.ConcreteIterator
+import mvcgame.model.gameObjects.{AbsCannon, AbsEnemy, AbsMissile, GameObject}
+
+import org.scalatest.Suite
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import org.scalatestplus.mockito.MockitoSugar.mock
 
 import scala.collection.mutable.ListBuffer
 
-class IteratorTest extends AnyFlatSpec with should.Matchers {
+class IteratorTest extends AnyFlatSpec with should.Matchers with Suite {
 
-  it should "iterate through list of GameObjects" in {
+  def test(): Unit = {
     val listBuffer: ListBuffer[GameObject] = ListBuffer.empty
     listBuffer += mock[AbsCannon]
     listBuffer += mock[AbsMissile]
@@ -21,6 +24,8 @@ class IteratorTest extends AnyFlatSpec with should.Matchers {
     iterator.next shouldBe a [AbsCannon]
     iterator.next shouldBe a [AbsMissile]
     iterator.next shouldBe a [AbsEnemy]
+
     iterator.hasNext should be (false)
+    an [IndexOutOfBoundsException] should be thrownBy(iterator.next)
   }
 }

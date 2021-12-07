@@ -1,9 +1,11 @@
 package cz.cvut.fit.niadp
+package UnitTests
 
-import cz.cvut.fit.niadp.mvcgame.command.{AimUpCmd, MoveCannonUpCmd, PowerUpCmd}
-import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig
-import cz.cvut.fit.niadp.mvcgame.memento.CareTaker
-import cz.cvut.fit.niadp.mvcgame.model.{GameModel, Position}
+import mvcgame.command.{AimUpCmd, MoveCannonUpCmd, PowerUpCmd}
+import mvcgame.config.MvcGameConfig
+import mvcgame.memento.CareTaker
+import mvcgame.model.{GameModel, Position}
+
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
